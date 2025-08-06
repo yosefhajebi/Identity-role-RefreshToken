@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "cWIFYN1zOew6P3PRUY5dm24wNsxFRwzaGduLQCYt4g4=",
+  "Source": "TestIdentity.WebApi",
+  "BasePath": "_content/TestIdentity.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

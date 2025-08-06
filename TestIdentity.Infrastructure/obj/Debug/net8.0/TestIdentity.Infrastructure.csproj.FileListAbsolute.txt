@@ -1,0 +1,17 @@
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\bin\Debug\net8.0\TestIdentity.Infrastructure.deps.json
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\bin\Debug\net8.0\TestIdentity.Infrastructure.dll
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\bin\Debug\net8.0\TestIdentity.Infrastructure.pdb
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\bin\Debug\net8.0\TestIdentity.Application.dll
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\bin\Debug\net8.0\TestIdentity.Domain.dll
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\bin\Debug\net8.0\TestIdentity.Application.pdb
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\bin\Debug\net8.0\TestIdentity.Domain.pdb
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\TestIdentity.Infrastructure.csproj.AssemblyReference.cache
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\TestIdentity.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\TestIdentity.Infrastructure.AssemblyInfoInputs.cache
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\TestIdentity.Infrastructure.AssemblyInfo.cs
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\TestIdentity.Infrastructure.csproj.CoreCompileInputs.cache
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\TestIdentity.Infrastructure.csproj.CopyComplete
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\TestIdentity.Infrastructure.dll
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\refint\TestIdentity.Infrastructure.dll
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\TestIdentity.Infrastructure.pdb
+D:\YHUser\TESTPRJ\TestIdentity\TestIdentity.Infrastructure\obj\Debug\net8.0\ref\TestIdentity.Infrastructure.dll
