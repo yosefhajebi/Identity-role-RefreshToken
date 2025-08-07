@@ -1,6 +1,6 @@
 namespace TestIdentity.Application.Interfaces;
 
-public interface ITokenService
+public interface ITokenApplicationService
 {
     string GenerateAccessToken(Guid userId, List<string> roles);
     string GenerateRefreshToken();

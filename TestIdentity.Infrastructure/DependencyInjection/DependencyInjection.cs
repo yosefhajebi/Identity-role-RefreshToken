@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TestIdentity.Application.Interfaces;
-using TestIdentity.Application.Services;
 using TestIdentity.Domain.Interfaces;
 using TestIdentity.Infrastructure.Persistence;
 using TestIdentity.Infrastructure.Persistence.Repositories;
@@ -21,7 +20,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IResourceRepository, ResourceRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<TestIdentity.Domain.Interfaces.ITokenService, TestIdentity.Infrastructure.Persistence.Repositories.TokenService>();
+        services.AddScoped<ITokenDomainService, TokenDomainService>();
+
+        services.AddScoped<ITokenApplicationService, TokenApplicationService>();
 
         // services.AddScoped<IAuthService, AuthService>();
         // services.AddScoped<IUserService, UserService>();

@@ -9,10 +9,10 @@ namespace TestIdentity.Application.Services;
 public class AuthService : IAuthService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly TestIdentity.Application.Interfaces.ITokenService _tokenService;
+    private readonly ITokenApplicationService _tokenService;
     private readonly IPasswordHasher _passwordHasher;
 
-    public AuthService(IUnitOfWork unitOfWork, TestIdentity.Application.Interfaces.ITokenService tokenService, IPasswordHasher passwordHasher)
+    public AuthService(IUnitOfWork unitOfWork, ITokenApplicationService tokenService, IPasswordHasher passwordHasher)
     {
         _unitOfWork = unitOfWork;
         _tokenService = tokenService;

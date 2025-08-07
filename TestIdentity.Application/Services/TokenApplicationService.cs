@@ -6,12 +6,12 @@ using TestIdentity.Application.Interfaces;
 
 namespace TestIdentity.Application.Services;
 
-public class TokenService : ITokenService
+public class TokenApplicationervice : ITokenApplicationService
 {
     private readonly string _jwtSecret;
     private readonly int _accessTokenExpirationMinutes;
 
-    public TokenService(string jwtSecret, int accessTokenExpirationMinutes = 30)
+    public TokenApplicationervice(string jwtSecret, int accessTokenExpirationMinutes = 30)
     {
         _jwtSecret = jwtSecret;
         _accessTokenExpirationMinutes = accessTokenExpirationMinutes;
