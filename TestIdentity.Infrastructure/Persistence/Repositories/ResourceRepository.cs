@@ -3,6 +3,7 @@ using TestIdentity.Domain.Entities;
 using TestIdentity.Application.Interfaces;
 using TestIdentity.Infrastructure.Persistence;
 using TestIdentity.Domain.Interfaces;
+
 namespace TestIdentity.Infrastructure.Persistence.Repositories;
 public class ResourceRepository : IResourceRepository
 {
@@ -27,7 +28,7 @@ public class ResourceRepository : IResourceRepository
         return resource;
     }
 
-    public async Task<List<Resource>> GetAllAsync()
+    public async Task<IEnumerable<Resource>> GetAllAsync()
     {
         return await _context.Resources
             .Include(r => r.Permissions)
@@ -39,21 +40,36 @@ public class ResourceRepository : IResourceRepository
         return await _context.Resources
             .Include(r => r.Permissions)
             .FirstOrDefaultAsync(r => r.Id == id);
-    }
+    }  
 
-    public async Task UpdateAsync(Resource resource)
+    public async Task RemoveAsync(Resource entity)
     {
-        _context.Resources.Update(resource);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(Guid id)
-    {
-        var resource = await _context.Resources.FindAsync(id);
+        var resource = await _context.Resources.FindAsync(entity);
         if (resource != null)
         {
             _context.Resources.Remove(resource);
             await _context.SaveChangesAsync();
         }
+    }
+    public void Update(Resource entity)
+    {
+          _context.Resources.Update(entity);
+         _context.SaveChangesAsync();
+    }
+
+    public void Remove(Resource entity)
+    {
+        var resource = _context.Resources.Find(entity);
+        if (resource != null)
+        {
+            _context.Resources.Remove(resource);
+             _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task UpdateAsync(Resource entity)
+    {
+        _context.Resources.Update(entity);
+         await _context.SaveChangesAsync();
     }
 }

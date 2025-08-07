@@ -2,12 +2,14 @@ using TestIdentity.Domain.Entities;
 
 namespace TestIdentity.Domain.Interfaces;
 
-public interface IResourceRepository
+public interface IResourceRepository:IRepository<Resource>
 {
     Task<Resource?> GetByNameAsync(string name);
-    Task<Resource> AddAsync(Resource resource);
-    Task<List<Resource>> GetAllAsync();
-    Task<Resource?> GetByIdAsync(Guid id);
-    Task UpdateAsync(Resource resource);
-    Task DeleteAsync(Guid id);
 }
+// Task<T?> GetByIdAsync(Guid id);
+//     Task<IEnumerable<T>> GetAllAsync();
+//     Task<T> AddAsync(T entity);
+//     Task UpdateAsync(T entity);
+//     Task RemoveAsync(T entity);
+//     void Update(T entity);
+//     void Remove(T entity);

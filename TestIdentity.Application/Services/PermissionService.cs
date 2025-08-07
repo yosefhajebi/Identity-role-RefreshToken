@@ -10,12 +10,10 @@ namespace TestIdentity.Application.Services;
 public class PermissionService : IPermissionService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IResourceRepository _resourceRepository;
 
-    public PermissionService(IUnitOfWork unitOfWork, IResourceRepository resourceRepository)
+    public PermissionService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _resourceRepository = resourceRepository;
     }
 
     public async Task<IEnumerable<PermissionDto>> GetAllAsync()
@@ -45,7 +43,7 @@ public class PermissionService : IPermissionService
         var role = await _unitOfWork.Roles.GetByIdAsync(roleId);
         if (role == null)
             throw new NotFoundException("نقش یافت نشد.");
-        var resource = await _resourceRepository.GetByNameAsync(dto.Resource);
+        var resource = await _unitOfWork.Resources.GetByNameAsync(dto.Resource);
         if (resource == null)
             throw new Exception("منبع یافت نشد.");
         var permission = Permission.Create(resource, Enum.Parse<PermissionAction>(dto.Action));

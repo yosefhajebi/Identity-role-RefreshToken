@@ -3,26 +3,31 @@ using TestIdentity.Application.Interfaces;
 using TestIdentity.Domain.Interfaces;
 using TestIdentity.Domain.ValueObjects;
 using TestIdentity.Application.Exceptions;
+using TestIdentity.Domain.Entities;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace TestIdentity.Application.Services;
 
 public class AuthService : IAuthService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserService _userService;
     private readonly ITokenApplicationService _tokenService;
     private readonly IPasswordHasher _passwordHasher;
 
-    public AuthService(IUnitOfWork unitOfWork, ITokenApplicationService tokenService, IPasswordHasher passwordHasher)
+    public AuthService(IUnitOfWork unitOfWork, ITokenApplicationService tokenService, IPasswordHasher passwordHasher, IUserService userService)
     {
         _unitOfWork = unitOfWork;
         _tokenService = tokenService;
         _passwordHasher = passwordHasher;
+        _userService = userService;
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
-        var email = Email.Create(request.Email);
-        var user = await _unitOfWork.Users.GetByUsernameAsync(email.Value);
+        //var email = Email.Create(request.Email);
+        var user = await _unitOfWork.Users.GetByUsernameAsync(request.UserName);
         if (user == null)
             throw new NotFoundException("کاربر یافت نشد.");
 
@@ -62,4 +67,22 @@ public class AuthService : IAuthService
         var newAccessToken = _tokenService.GenerateAccessToken(matchedUser.Id, matchedUser.Roles.Select(r => r.Name).ToList());
         return newAccessToken;
     }
+    public async Task<bool> RegisterAsync(RegisterRequest registerDto)
+    {
+        // بررسی تکراری نبودن نام کاربری یا ایمیل
+        var existingUser = await _unitOfWork.Users.GetByUsernameAsync(registerDto.UserName);
+        if (existingUser != null)
+            return false;
+
+        var isEmailTaken = await _unitOfWork.Users.IsEmailTakenAsync(registerDto.Email);
+        if (isEmailTaken)
+            return false;
+       
+        // ساخت کاربر جدید
+        //var user = User.Create(FullName.Create(registerDto.FirstName, registerDto.LastName),Email.Create(registerDto.Email),registerDto.UserName,Password.Create(hashedPassword));
+        _userService.CreateAsync(registerDto);
+        //user.UpdateRoles(registerDto.Roles);
+        return true;
+    }    
+
 }

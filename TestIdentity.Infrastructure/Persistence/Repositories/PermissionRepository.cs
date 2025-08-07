@@ -58,13 +58,13 @@ public class PermissionRepository : IPermissionRepository
          }
     }
 
-    void IRepository<Permission>.Update(Permission entity)
+    public void Update(Permission entity)
     {
          _context.Permissions.Update(entity);
          _context.SaveChangesAsync();
     }
 
-    void IRepository<Permission>.Remove(Permission entity)
+    public void Remove(Permission entity)
     {
         var permission =  _context.Permissions.FirstOrDefault(entity);
          if (permission != null)

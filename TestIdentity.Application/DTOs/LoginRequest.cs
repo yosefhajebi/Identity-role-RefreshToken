@@ -2,6 +2,7 @@ namespace TestIdentity.Application.DTOs;
 
 public class LoginRequest
 {
-    public string Email { get; set; } = default!;
+    //public string Email  { get; set; } = default!;
+    public string UserName { get; set; } = default!;
     public string Password { get; set; } = default!;
 }

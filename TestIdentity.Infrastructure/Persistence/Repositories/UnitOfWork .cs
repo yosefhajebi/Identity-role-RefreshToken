@@ -7,17 +7,19 @@ public class UnitOfWork : IUnitOfWork
     public IUserRepository Users { get; }
     public IRoleRepository Roles { get; }
     public IPermissionRepository Permissions { get; }
-
+    public IResourceRepository Resources { get; }
     public UnitOfWork(
         AppDbContext context,
         IUserRepository userRepository,
         IRoleRepository roleRepository,
-        IPermissionRepository permissionRepository)
+        IPermissionRepository permissionRepository,
+        IResourceRepository resourceRepository)
     {
         _context = context;
         Users = userRepository;
         Roles = roleRepository;
         Permissions = permissionRepository;
+        Resources = resourceRepository;
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

@@ -1,11 +1,10 @@
 using TestIdentity.Domain.ValueObjects;
-
+using TestIdentity.Domain.Common;
 namespace TestIdentity.Domain.Entities;
 
-public class User
+public class User:BaseEntity
 {
-    public Guid Id { get; private set; }
-    public string Username { get; set; }
+    public string Username { get; private set; }
     public FullName FullName { get; private set; }
     public Email Email { get; private set; }
     public string PasswordHash { get; private set; }
@@ -15,13 +14,14 @@ public class User
 
     private User() { }
 
-    public static User Create(FullName fullName, Email email, Password password)
+    public static User Create(FullName fullName, Email email, string userName, Password password)
     {
         return new User
         {
             Id = Guid.NewGuid(),
             FullName = fullName,
             Email = email,
+            Username = userName,
             PasswordHash = password.Value
         };
     }
