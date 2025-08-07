@@ -1,0 +1,41 @@
+# ========================
+# Angular (Frontend)
+# ========================
+node_modules/
+dist/
+tmp/
+.env
+*.log
+*.tsbuildinfo
+
+# IDEs
+.vscode/
+.idea/
+
+# ========================
+# ASP.NET Core (Backend)
+# ========================
+bin/
+obj/
+*.user
+*.suo
+*.vs/
+*.db
+*.sqlite
+*.pdb
+*.log
+*.cache
+*.config
+*.bak
+
+# Sensitive config files
+appsettings*.json
+
+# Entity Framework Migrations
+Migrations/
+
+# ========================
+# OS-specific
+# ========================
+.DS_Store
+Thumbs.db
