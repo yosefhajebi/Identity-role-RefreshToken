@@ -17,8 +17,17 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPermissionRepository, PermissionRepository>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IResourceRepository, ResourceRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<TestIdentity.Domain.Interfaces.ITokenService, TestIdentity.Infrastructure.Persistence.Repositories.TokenService>();
+
+        // services.AddScoped<IAuthService, AuthService>();
+        // services.AddScoped<IUserService, UserService>();
+        
+        
+        
 
         return services;
     }

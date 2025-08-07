@@ -5,12 +5,13 @@ namespace TestIdentity.Domain.Entities;
 public class User
 {
     public Guid Id { get; private set; }
+    public string Username { get; set; }
     public FullName FullName { get; private set; }
     public Email Email { get; private set; }
     public string PasswordHash { get; private set; }
     public List<Role> Roles { get; private set; } = new();
 
-    public string? RefreshToken { get; private set; } // 👈 اضافه کن
+    public string? RefreshToken { get; private set; } 
 
     private User() { }
 
