@@ -2,9 +2,7 @@ using TestIdentity.Domain.Entities;
 
 namespace TestIdentity.Domain.Interfaces;
 
-public interface IRoleRepository
+public interface IRoleRepository : IRepository<Role>
 {
-    Task<Role?> GetByNameAsync(string name);
-    Task<List<Role>> GetAllAsync();
-    Task AddAsync(Role role);
+    Task<Role?> GetByNameAsync(string roleName);
 }

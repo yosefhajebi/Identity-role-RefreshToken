@@ -2,7 +2,6 @@ namespace TestIdentity.Domain.Enums;
 
 public enum RoleType
 {
-    Admin,
-    User,
-    Manager
+    System = 0,     // نقش‌های سیستمی مثل Admin
+    Custom = 1      // نقش‌های تعریف‌شده توسط مدیر یا کاربر
 }

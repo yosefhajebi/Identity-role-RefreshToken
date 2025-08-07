@@ -1,18 +1,9 @@
-using TestIdentity.Domain.Common;
-
 namespace TestIdentity.Domain.Entities;
-
-public class Role : BaseEntity
+using TestIdentity.Domain.Common;
+public class Role:BaseEntity
 {
-    public string Name { get; private set; }
+    public string Name { get; set; } = string.Empty;
 
-    public ICollection<UserRole> UserRoles { get; private set; } = new List<UserRole>();
-
-    public Role(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Role name cannot be empty.");
-
-        Name = name;
-    }
+    public List<RolePermission> RolePermissions { get; set; } = new();
+    public List<User> Users { get; set; } = new();
 }

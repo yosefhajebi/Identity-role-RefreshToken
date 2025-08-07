@@ -1,6 +1,6 @@
 namespace TestIdentity.Domain.Entities;
-
-public class UserRole
+using TestIdentity.Domain.Common;
+public class UserRole:BaseEntity
 {
     public Guid UserId { get; private set; }
     public User? User { get; set; }
