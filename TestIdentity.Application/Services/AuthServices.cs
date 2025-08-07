@@ -1,102 +1,65 @@
 using TestIdentity.Application.DTOs;
-using TestIdentity.Application.Exceptions;
 using TestIdentity.Application.Interfaces;
-using TestIdentity.Domain.Entities;
 using TestIdentity.Domain.Interfaces;
 using TestIdentity.Domain.ValueObjects;
+using TestIdentity.Application.Exceptions;
 
 namespace TestIdentity.Application.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IUserRepository _userRepo;
-    private readonly IRoleRepository _roleRepo;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly TestIdentity.Application.Interfaces.ITokenService _tokenService;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public AuthService(IUserRepository userRepo, IRoleRepository roleRepo)
+    public AuthService(IUnitOfWork unitOfWork, TestIdentity.Application.Interfaces.ITokenService tokenService, IPasswordHasher passwordHasher)
     {
-        _userRepo = userRepo;
-        _roleRepo = roleRepo;
+        _unitOfWork = unitOfWork;
+        _tokenService = tokenService;
+        _passwordHasher = passwordHasher;
     }
 
-    public async Task<UserDto> RegisterAsync(RegisterUserDto dto)
+    public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
-        if (await _userRepo.ExistsAsync(dto.Username))
-            throw new AppException("Username already exists.");
+        var email = Email.Create(request.Email);
+        var user = await _unitOfWork.Users.GetByUsernameAsync(email.Value);
+        if (user == null)
+            throw new NotFoundException("کاربر یافت نشد.");
 
-        var email = new Email(dto.Email);
-        var passwordHash = HashPassword(dto.Password); // فرضی
+        if (!_passwordHasher.VerifyPassword(user.PasswordHash, request.Password))
+            throw new ValidationException("رمز عبور اشتباه است.");
 
-        var user = new User(dto.Username, email, passwordHash);
+        var accessToken = _tokenService.GenerateAccessToken(user.Id, user.Roles.Select(r => r.Name).ToList());
+        var refreshToken = _tokenService.GenerateRefreshToken();
 
-        var defaultRole = await _roleRepo.GetByNameAsync("User");
-        if (defaultRole != null)
-            user.AssignRole(defaultRole);
+        user.SetRefreshToken(refreshToken);
+        await _unitOfWork.SaveChangesAsync();
 
-        await _userRepo.AddAsync(user);
-
-        return ToUserDto(user);
-    }
-
-    public async Task<UserDto> LoginAsync(LoginDto dto)
-    {
-        var user = await _userRepo.GetByUsernameAsync(dto.Username);
-        if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
-            throw new AppException("Invalid credentials.");
-
-        return ToUserDto(user);
-    }
-
-    private string HashPassword(string password)
-    {
-        // فقط برای نمونه
-        return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(password));
-    }
-
-    private bool VerifyPassword(string password, string hash)
-    {
-        return HashPassword(password) == hash;
-    }
-
-    private UserDto ToUserDto(User user)
-    {
-        return new UserDto
+        return new AuthResponse
         {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email.ToString(),
-            Roles = user.UserRoles.Select(ur => ur.Role?.Name ?? "").ToList()
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            ExpiresAt = DateTime.UtcNow.AddMinutes(30)
         };
     }
-    // public async Task<AuthResultDto> RefreshTokenAsync(string token)
-    // {
-    //     var refreshToken = await _context.RefreshTokens
-    //         .Include(rt => rt.User)
-    //         .FirstOrDefaultAsync(rt => rt.Token == token && !rt.IsRevoked);
 
-    //     if (refreshToken == null || refreshToken.Expires < DateTime.UtcNow)
-    //         throw new Exception("Invalid or expired refresh token");
+    public async Task LogoutAsync(Guid userId)
+    {
+        var user = await _unitOfWork.Users.GetByIdAsync(userId);
+        if (user == null) return;
 
-    //     // revoke old token
-    //     refreshToken.IsRevoked = true;
+        user.ClearRefreshToken();
+        await _unitOfWork.SaveChangesAsync();
+    }
 
-    //     // generate new tokens
-    //     var jwtToken = _jwtService.GenerateToken(refreshToken.User!);
-    //     var newRefreshToken = new RefreshToken
-    //     {
-    //         Token = _jwtService.GenerateRefreshToken(),
-    //         Expires = DateTime.UtcNow.AddDays(7),
-    //         UserId = refreshToken.UserId
-    //     };
+    public async Task<string> RefreshTokenAsync(string refreshToken)
+    {
+        var users = await _unitOfWork.Users.GetAllAsync();
+        var matchedUser = users.FirstOrDefault(u => u.RefreshToken == refreshToken);
+        if (matchedUser == null)
+            throw new ValidationException("توکن نامعتبر است.");
 
-    //     _context.RefreshTokens.Add(newRefreshToken);
-    //     await _context.SaveChangesAsync();
-
-    //     return new AuthResultDto
-    //     {
-    //         Token = jwtToken,
-    //         RefreshToken = newRefreshToken.Token,
-    //         Username = refreshToken.User!.UserName!
-    //     };
-    // }
-
+        var newAccessToken = _tokenService.GenerateAccessToken(matchedUser.Id, matchedUser.Roles.Select(r => r.Name).ToList());
+        return newAccessToken;
+    }
 }
