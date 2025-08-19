@@ -6,6 +6,6 @@ public interface IUnitOfWork : IDisposable
     IRoleRepository Roles { get; }
     IPermissionRepository Permissions { get; }
     IResourceRepository Resources { get; }
-
+    IRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -8,6 +8,7 @@ public class UnitOfWork : IUnitOfWork
     public IRoleRepository Roles { get; }
     public IPermissionRepository Permissions { get; }
     public IResourceRepository Resources { get; }
+    private readonly Dictionary<Type, object> _repositories = new();
     public UnitOfWork(
         AppDbContext context,
         IUserRepository userRepository,
@@ -27,6 +28,18 @@ public class UnitOfWork : IUnitOfWork
         return await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
+    {
+        var type = typeof(TEntity);
+
+        if (!_repositories.ContainsKey(type))
+        {
+            var repositoryInstance = new GenericRepository<TEntity>(_context);
+            _repositories[type] = repositoryInstance;
+        }
+
+        return (IRepository<TEntity>)_repositories[type];
+    }
     public void Dispose()
     {
         _context.Dispose();

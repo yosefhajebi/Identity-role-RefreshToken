@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
     {
+         
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString));
 
@@ -27,8 +28,10 @@ public static class ServiceCollectionExtensions
         // services.AddScoped<IAuthService, AuthService>();
         // services.AddScoped<IUserService, UserService>();
         
-        
-        
+        // services.AddScoped<IService<User>, UserService>();
+        // services.AddScoped<UserService>();
+
+
 
         return services;
     }

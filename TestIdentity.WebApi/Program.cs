@@ -1,11 +1,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using TestIdentity.Application;
 using TestIdentity.Infrastructure.DependencyInjection;
 using TestIdentity.WebAPI.Middleware;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/app_log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+//log
+builder.Host.UseSerilog();
 
 // تنظیمات JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -35,6 +42,8 @@ builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("De
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
