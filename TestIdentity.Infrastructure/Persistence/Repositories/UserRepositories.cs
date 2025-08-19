@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using TestIdentity.Domain.Entities;
 using TestIdentity.Domain.Interfaces;
+using TestIdentity.Infrastructure.Persistence;
 
 public class UserRepository :GenericRepository<User>, IUserRepository
 {
     protected readonly DbSet<User> _dbSet;
-    public UserRepository(DbContext context) : base(context)
+    public UserRepository(AppDbContext context) : base(context)
     {
-       _dbSet = context.Set<User>();
+       _dbSet = context.Users;
     }
 
     public async Task<User?> GetByUsernameAsync(string username)
@@ -21,4 +22,6 @@ public class UserRepository :GenericRepository<User>, IUserRepository
     {
         return await _dbSet.AnyAsync(u => u.Email.Value == email);
     }
+
+  
 }

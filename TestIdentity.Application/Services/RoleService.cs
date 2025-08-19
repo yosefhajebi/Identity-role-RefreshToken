@@ -1,68 +1,110 @@
-using TestIdentity.Application.DTOs;
+using TestIdentity.Application.DTOs.Role;
 using TestIdentity.Application.Interfaces;
 using TestIdentity.Domain.Entities;
 using TestIdentity.Domain.Interfaces;
-using TestIdentity.Application.Exceptions;
+using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace TestIdentity.Application.Services;
-
-public class RoleService : IRoleService
+public class RoleService : BaseService<Role, RegisterRoleRequest, UpdateRoleRequest, RoleDto>, IRoleService
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public RoleService(IUnitOfWork unitOfWork)
+    protected readonly IRoleRepository _repository;
+    protected readonly IMapper _mapper;
+    public RoleService(
+        IUnitOfWork unitOfWork,
+        ILogger<BaseService<Role, RegisterRoleRequest, UpdateRoleRequest, RoleDto>> logger,
+        IMapper mapper,
+        IRoleRepository roleRepository
+        )
+        : base(unitOfWork, logger, mapper)
     {
-        _unitOfWork = unitOfWork;
+        _repository = roleRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<RoleDto>> GetAllAsync()
+    public async Task<RoleDto?> GetByRoleNameAsync(string roleName)
     {
-        var roles = await _unitOfWork.Roles.GetAllAsync();
-        return roles.Select(r => new RoleDto
+        var role = await _repository.GetByNameAsync(roleName);
+        if (role != null)
         {
-            Id = r.Id,
-            Name = r.Name,
-            Permissions = r.Permissions.Select(p => $"{p.Resource}:{p.Action}").ToList()
-        });
-    }
-
-    public async Task<RoleDto?> GetByIdAsync(Guid id)
-    {
-        var role = await _unitOfWork.Roles.GetByIdAsync(id);
-        if (role == null) return null;
-
-        return new RoleDto
+            return _mapper.Map<RoleDto>(role);
+        }
+        else
         {
-            Id = role.Id,
-            Name = role.Name,
-            Permissions = role.Permissions.Select(p => $"{p.Resource}:{p.Action}").ToList()
-        };
+            return null;
+        }
     }
 
-    public async Task CreateAsync(RoleDto dto)
-    {
-        var role = Role.Create(dto.Name);
-        await _unitOfWork.Roles.AddAsync(role);
-        await _unitOfWork.SaveChangesAsync();
-    }
 
-    public async Task UpdateAsync(Guid id, RoleDto dto)
-    {
-        var role = await _unitOfWork.Roles.GetByIdAsync(id);
-        if (role == null)
-            throw new NotFoundException("نقش یافت نشد.");
 
-        role.UpdateName(dto.Name);
-        _unitOfWork.Roles.Update(role);
-        await _unitOfWork.SaveChangesAsync();
-    }
 
-    public async Task DeleteAsync(Guid id)
-    {
-        var role = await _unitOfWork.Roles.GetByIdAsync(id);
-        if (role == null) return;
+    // public UserService(
+    //     IUnitOfWork unitOfWork,
+    //     ILogger<BaseService<User, RegisterRequest, UpdateUserRequest, UserDto>> logger,
+    //     IMapper mapper,
+    //     IUserRepository userRepository) : base(unitOfWork, logger, mapper)
+    // {
+    //      _repository = userRepository;
+    // }
 
-        _unitOfWork.Roles.Remove(role);
-        await _unitOfWork.SaveChangesAsync();
-    }
 }
+// public class RoleService : IRoleService
+// {
+//     private readonly IUnitOfWork _unitOfWork;
+
+//     public RoleService(IUnitOfWork unitOfWork)
+//     {
+//         _unitOfWork = unitOfWork;
+//     }
+
+//     public async Task<IEnumerable<RoleDto>> GetAllAsync()
+//     {
+//         var roles = await _unitOfWork.Roles.GetAllAsync();
+//         return roles.Select(r => new RoleDto
+//         {
+//             Id = r.Id,
+//             Name = r.Name,
+//             Permissions = r.Permissions.Select(p => $"{p.Resource}:{p.Action}").ToList()
+//         });
+//     }
+
+//     public async Task<RoleDto?> GetByIdAsync(Guid id)
+//     {
+//         var role = await _unitOfWork.Roles.GetByIdAsync(id);
+//         if (role == null) return null;
+
+//         return new RoleDto
+//         {
+//             Id = role.Id,
+//             Name = role.Name,
+//             Permissions = role.Permissions.Select(p => $"{p.Resource}:{p.Action}").ToList()
+//         };
+//     }
+
+//     public async Task CreateAsync(RoleDto dto)
+//     {
+//         var role = Role.Create(dto.Name);
+//         await _unitOfWork.Roles.AddAsync(role);
+//         await _unitOfWork.SaveChangesAsync();
+//     }
+
+//     public async Task UpdateAsync(Guid id, RoleDto dto)
+//     {
+//         var role = await _unitOfWork.Roles.GetByIdAsync(id);
+//         if (role == null)
+//             throw new NotFoundException("نقش یافت نشد.");
+
+//         role.UpdateName(dto.Name);
+//         _unitOfWork.Roles.Update(role);
+//         await _unitOfWork.SaveChangesAsync();
+//     }
+
+//     public async Task DeleteAsync(Guid id)
+//     {
+//         var role = await _unitOfWork.Roles.GetByIdAsync(id);
+//         if (role == null) return;
+
+//         _unitOfWork.Roles.Remove(role);
+//         await _unitOfWork.SaveChangesAsync();
+//     }
+// }

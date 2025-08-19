@@ -25,7 +25,10 @@ public abstract class BaseService<TEntity,TCreate, TUpdate, TDto>:IService<TEnti
     protected readonly ILogger<BaseService<TEntity,TCreate, TUpdate, TDto>> _logger;
     protected readonly IRepository<TEntity> _repository;
      protected readonly IMapper _mapper;
-    protected BaseService(IUnitOfWork unitOfWork, ILogger<BaseService<TEntity, TCreate, TUpdate, TDto>> logger, IMapper mapper)
+    protected BaseService(
+        IUnitOfWork unitOfWork,
+        ILogger<BaseService<TEntity, TCreate, TUpdate, TDto>> logger,
+        IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _logger = logger;

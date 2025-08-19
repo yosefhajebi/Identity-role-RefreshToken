@@ -1,4 +1,4 @@
-namespace TestIdentity.Application.DTOs;
+namespace TestIdentity.Application.DTOs.Role;
 
 public class RoleDto
 {
