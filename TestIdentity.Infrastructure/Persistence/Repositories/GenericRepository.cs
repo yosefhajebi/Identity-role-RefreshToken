@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using TestIdentity.Domain.Interfaces;
 public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
@@ -16,9 +17,18 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : c
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    // public async Task<IEnumerable<TEntity>> GetAllAsync()
+    // {
+    //     return await _dbSet.ToListAsync();
+    // }
+    public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null)
     {
-        return await _dbSet.ToListAsync();
+        IQueryable<TEntity> query = _dbSet;
+
+        if (predicate != null)
+            query = query.Where(predicate);
+
+        return await query.ToListAsync();
     }
 
     public async Task AddAsync(TEntity entity)
@@ -34,5 +44,14 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : c
     public void Delete(TEntity entity)
     {
         _dbSet.Remove(entity);
+    }
+    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate = null)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (predicate != null)
+            query = query.Where(predicate);
+
+        return await query.AnyAsync();
     }
 }

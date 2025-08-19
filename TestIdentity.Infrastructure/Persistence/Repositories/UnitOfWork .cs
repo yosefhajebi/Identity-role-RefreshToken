@@ -4,23 +4,24 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
 
-    public IUserRepository Users { get; }
-    public IRoleRepository Roles { get; }
-    public IPermissionRepository Permissions { get; }
-    public IResourceRepository Resources { get; }
+    //public IUserRepository Users { get; }
+    //public IRoleRepository Roles { get; }
+    //public IPermissionRepository Permissions { get; }
+    //public IResourceRepository Resources { get; }
     private readonly Dictionary<Type, object> _repositories = new();
     public UnitOfWork(
-        AppDbContext context,
-        IUserRepository userRepository,
-        IRoleRepository roleRepository,
-        IPermissionRepository permissionRepository,
-        IResourceRepository resourceRepository)
+        AppDbContext context//,
+        //IUserRepository userRepository,
+        //IRoleRepository roleRepository,
+        ///IPermissionRepository permissionRepository,
+        //IResourceRepository resourceRepository
+        )
     {
         _context = context;
-        Users = userRepository;
-        Roles = roleRepository;
-        Permissions = permissionRepository;
-        Resources = resourceRepository;
+        //Users = userRepository;
+        //Roles = roleRepository;
+        //Permissions = permissionRepository;
+        //Resources = resourceRepository;
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

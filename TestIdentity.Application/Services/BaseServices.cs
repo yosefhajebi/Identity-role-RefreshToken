@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using TestIdentity.Application.Interfaces;
 using TestIdentity.Domain.Interfaces;
 using AutoMapper;
+using System.Linq.Expressions;
 
 
 namespace TestIdentity.Application.Services;
@@ -32,12 +33,12 @@ public abstract class BaseService<TEntity,TCreate, TUpdate, TDto>:IService<TEnti
         _mapper = mapper;
     }
 
-    public virtual async Task<TCreate> CreateAsync(TCreate dto)
+    public virtual async Task CreateAsync(TCreate dto)
     {
         var entity = _mapper.Map<TEntity>(dto);
         await _repository.AddAsync(entity);
         await _unitOfWork.SaveChangesAsync();
-        return _mapper.Map<TCreate>(entity);        
+        //return _mapper.Map<TCreate>(entity);        
     }
 
     public async Task<bool> DeleteAsync(Guid id)
@@ -50,7 +51,7 @@ public abstract class BaseService<TEntity,TCreate, TUpdate, TDto>:IService<TEnti
         return true;
     }
 
-    public async Task<IEnumerable<TDto>> GetAllAsync()
+    public async Task<IEnumerable<TDto>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null)
     {
         var entities = await _repository.GetAllAsync();
         return _mapper.Map<IEnumerable<TDto>>(entities);

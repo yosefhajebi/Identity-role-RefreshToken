@@ -15,19 +15,20 @@ public class AuthService : IAuthService
     private readonly IUserService _userService;
     private readonly ITokenApplicationService _tokenService;
     private readonly IPasswordHasher _passwordHasher;
-
+    private readonly IRepository<User> _userRepository;
     public AuthService(IUnitOfWork unitOfWork, ITokenApplicationService tokenService, IPasswordHasher passwordHasher, IUserService userService)
     {
         _unitOfWork = unitOfWork;
         _tokenService = tokenService;
         _passwordHasher = passwordHasher;
         _userService = userService;
+        _userRepository = _unitOfWork.GetRepository<User>();
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
         //var email = Email.Create(request.Email);
-        var user = await _unitOfWork.Users.GetByUsernameAsync(request.UserName);
+        var user = await _userService.GetByUsernameAsync(request.UserName);
         if (user == null)
             throw new NotFoundException("کاربر یافت نشد.");
 
@@ -50,7 +51,7 @@ public class AuthService : IAuthService
 
     public async Task LogoutAsync(Guid userId)
     {
-        var user = await _unitOfWork.Users.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(userId);
         if (user == null) return;
 
         user.ClearRefreshToken();
@@ -59,7 +60,7 @@ public class AuthService : IAuthService
 
     public async Task<string> RefreshTokenAsync(string refreshToken)
     {
-        var users = await _unitOfWork.Users.GetAllAsync();
+        var users = await _userRepository.GetAllAsync();
         var matchedUser = users.FirstOrDefault(u => u.RefreshToken == refreshToken);
         if (matchedUser == null)
             throw new ValidationException("توکن نامعتبر است.");
@@ -70,18 +71,16 @@ public class AuthService : IAuthService
     public async Task<bool> RegisterAsync(RegisterRequest registerDto)
     {
         // بررسی تکراری نبودن نام کاربری یا ایمیل
-        var existingUser = await _unitOfWork.Users.GetByUsernameAsync(registerDto.UserName);
+        var existingUser = await _userService.GetByUsernameAsync(registerDto.UserName);
         if (existingUser != null)
             return false;
 
-        var isEmailTaken = await _unitOfWork.Users.IsEmailTakenAsync(registerDto.Email);
+        var isEmailTaken = await _userService.IsEmailTakenAsync(registerDto.Email);
         if (isEmailTaken)
             return false;
        
-        // ساخت کاربر جدید
-        //var user = User.Create(FullName.Create(registerDto.FirstName, registerDto.LastName),Email.Create(registerDto.Email),registerDto.UserName,Password.Create(hashedPassword));
-        _userService.CreateAsync(registerDto);
-        //user.UpdateRoles(registerDto.Roles);
+        // ساخت کاربر جدید        
+        await _userService.CreateAsync(registerDto);
         return true;
     }    
 
