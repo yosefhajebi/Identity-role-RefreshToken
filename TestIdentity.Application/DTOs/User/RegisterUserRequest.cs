@@ -1,6 +1,6 @@
 namespace TestIdentity.Application.DTOs;
 
-public class RegisterRequest
+public class RegisterUserRequest
 {
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;

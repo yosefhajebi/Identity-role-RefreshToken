@@ -4,17 +4,16 @@ using TestIdentity.Domain.Interfaces;
 using TestIdentity.Domain.Entities;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
-using Microsoft.AspNetCore.Http.Features;
 using TestIdentity.Application.DTOs.Role;
 
 namespace TestIdentity.Application.Services;
 
-public class UserService : BaseService<User, RegisterRequest, UpdateUserRequest, UserDto>, IUserService
+public class UserService : BaseService<User, RegisterUserRequest, UpdateUserRequest, UserDto>, IUserService
 {
     protected readonly IRepository<User> _userRepository;
     public UserService(
         IUnitOfWork unitOfWork,
-        ILogger<BaseService<User, RegisterRequest, UpdateUserRequest, UserDto>> logger,
+        ILogger<BaseService<User, RegisterUserRequest, UpdateUserRequest, UserDto>> logger,
         IMapper mapper//,
                       //IUserRepository userRepository
         ) : base(unitOfWork, logger, mapper)
@@ -34,7 +33,7 @@ public class UserService : BaseService<User, RegisterRequest, UpdateUserRequest,
         }
 
     }
-    public override async Task CreateAsync(RegisterRequest dto)
+    public override async Task CreateAsync(RegisterUserRequest dto)
     {
         await base.CreateAsync(dto);
     }

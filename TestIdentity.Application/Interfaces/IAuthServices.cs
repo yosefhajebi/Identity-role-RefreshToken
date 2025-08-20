@@ -7,5 +7,5 @@ public interface IAuthService
     Task<AuthResponse> LoginAsync(LoginRequest request);
     Task LogoutAsync(Guid userId);
     Task<string> RefreshTokenAsync(string refreshToken);
-    Task<bool> RegisterAsync(RegisterRequest registerDto);
+    Task<bool> RegisterAsync(RegisterUserRequest registerDto);
 }

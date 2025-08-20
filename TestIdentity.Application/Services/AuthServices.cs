@@ -68,7 +68,7 @@ public class AuthService : IAuthService
         var newAccessToken = _tokenService.GenerateAccessToken(matchedUser.Id, matchedUser.Roles.Select(r => r.Name).ToList());
         return newAccessToken;
     }
-    public async Task<bool> RegisterAsync(RegisterRequest registerDto)
+    public async Task<bool> RegisterAsync(RegisterUserRequest registerDto)
     {
         // بررسی تکراری نبودن نام کاربری یا ایمیل
         var existingUser = await _userService.GetByUsernameAsync(registerDto.UserName);
