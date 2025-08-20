@@ -40,7 +40,7 @@ public class UserService : BaseService<User, RegisterRequest, UpdateUserRequest,
     }
     public async Task<bool> IsEmailTakenAsync(string email)
     {
-        //return await _userRepository.AnyAsync(u => u.Email.Value == email);
+        //return await _userRepository.AnyAsync(u => u.Email.Value == email);        
         return await _unitOfWork.Users.IsEmailTakenAsync(email);
     }
     public async Task<IEnumerable<RoleDto>> GetUserRolById(Guid userId)

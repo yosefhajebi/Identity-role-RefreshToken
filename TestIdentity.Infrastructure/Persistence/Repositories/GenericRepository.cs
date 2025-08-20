@@ -54,4 +54,6 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : c
 
         return await query.AnyAsync();
     }
+    public IQueryable<TEntity> AsQueryable() => _dbSet.AsQueryable();
+     
 }

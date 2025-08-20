@@ -23,8 +23,8 @@ public class UserRepository :GenericRepository<User>, IUserRepository
         return await _dbSet.AnyAsync(u => u.Email.Value == email);
     }
     public async Task<IEnumerable<Role>> GetUserRolById(Guid userId)
-    {
-        return await _dbSet.Where(u=>u.Id==userId).SelectMany(u=>u.Roles).ToListAsync();        
+    {        
+        return await _dbSet.Where(u => u.Id == userId).SelectMany(u => u.Roles).ToListAsync();        
     }
   
 }
