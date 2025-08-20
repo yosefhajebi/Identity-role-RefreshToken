@@ -38,6 +38,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // ثبت سرویس‌ها
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

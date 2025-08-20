@@ -11,8 +11,8 @@ public class RoleConfig : IEntityTypeConfiguration<Role>
         builder.HasKey(r => r.Id);
         builder.Property(r => r.Name).IsRequired().HasMaxLength(50);
 
-        builder.HasMany(r => r.UserRoles)
-               .WithOne(ur => ur.Role)
-               .HasForeignKey(ur => ur.RoleId);
+        // builder.HasMany(r => r.UserRoles)
+        //        .WithOne(ur => ur.Role)
+        //        .HasForeignKey(ur => ur.RoleId);
     }
 }

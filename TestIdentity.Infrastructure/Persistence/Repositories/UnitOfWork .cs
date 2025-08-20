@@ -4,7 +4,7 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
 
-    //public IUserRepository Users { get; }
+    public IUserRepository Users { get; }
     //public IRoleRepository Roles { get; }
     //public IPermissionRepository Permissions { get; }
     //public IResourceRepository Resources { get; }
@@ -18,7 +18,7 @@ public class UnitOfWork : IUnitOfWork
         )
     {
         _context = context;
-        //Users = userRepository;
+        Users = new UserRepository(_context);
         //Roles = roleRepository;
         //Permissions = permissionRepository;
         //Resources = resourceRepository;

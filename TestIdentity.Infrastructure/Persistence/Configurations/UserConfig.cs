@@ -16,8 +16,8 @@ public class UserConfig : IEntityTypeConfiguration<User>
             email.Property(e => e.Value).HasColumnName("Email").IsRequired();
         });
 
-        builder.HasMany(u => u.UserRoles)
-               .WithOne(ur => ur.User)
-               .HasForeignKey(ur => ur.UserId);
+        // builder.HasMany(u => u.UserRoles)
+        //        .WithOne(ur => ur.User)
+        //        .HasForeignKey(ur => ur.UserId);
     }
 }

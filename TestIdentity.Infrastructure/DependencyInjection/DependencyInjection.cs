@@ -15,15 +15,15 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString));
 
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IPermissionRepository, PermissionRepository>();
-        services.AddScoped<IPasswordHasher, PasswordHasher>();
-        services.AddScoped<IResourceRepository, ResourceRepository>();
+        //services.AddScoped<IUserRepository, UserRepository>();
+        //services.AddScoped<IRoleRepository, RoleRepository>();
+        //services.AddScoped<IPermissionRepository, PermissionRepository>();
+        //services.AddScoped<IPasswordHasher, PasswordHasher>();
+        //services.AddScoped<IResourceRepository, ResourceRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<ITokenDomainService, TokenDomainService>();
+        //services.AddScoped<ITokenDomainService, TokenDomainService>();
 
-        services.AddScoped<ITokenApplicationService, TokenApplicationService>();
+        //services.AddScoped<ITokenApplicationService, TokenApplicationService>();
 
         // services.AddScoped<IAuthService, AuthService>();
         // services.AddScoped<IUserService, UserService>();
