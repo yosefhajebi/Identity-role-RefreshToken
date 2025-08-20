@@ -4,6 +4,7 @@ namespace TestIdentity.Domain.Entities;
 
 public class User:BaseEntity
 {
+    public Guid TenantId { get; set; }
     public string Username { get; private set; }
     public FullName FullName { get; private set; }
     public Email Email { get; private set; }

@@ -14,9 +14,10 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
     {
 
-        services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(connectionString));      
+         services.AddDbContext<AppDbContext>(options =>
 
+             options.UseSqlServer(connectionString));  
+        
         // ثبت ریپازیتوری‌ها
         services.Scan(scan => scan
             .FromAssemblyOf<GenericRepository<User>>() // یا هر کلاس مرجع در Infrastructure
